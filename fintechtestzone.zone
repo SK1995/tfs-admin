@@ -1,0 +1,21 @@
+$TTL 86400
+@       IN  SOA     ns1.fintechzone  root.fintechzone. (
+        2017011301;Serial
+        3600    ;Refresh
+        1800    ;Retry
+        604800  ;Expire
+        86400   ;Minimum TTL
+)
+
+        IN      NS      s-27.fintech-admin.m1.tinkoff.cloud.        
+        IN      MX      10      mail.fintechtestzone.
+
+
+
+
+@    IN      A       0.0.0.0
+
+
+@ 10800 IN TXT "Any text"
+
+
