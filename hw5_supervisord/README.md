@@ -17,7 +17,7 @@
 #установка необходимых пакетов
 sudo yum install -y uwsgi uwsgi-plugin-python supervisor
 
-#обновление репозитория с заданием/root/homework
+#обновление репозитория с заданием
 cd /root/homework && git pull origin master
 
 #копирование компонент веб-приложения в новый каталог
@@ -45,8 +45,8 @@ Post content:
 ### 2) Запуск приложения при помощи supervisor
 ```bash
 #включение сервиса supervisord и настройка его автозапуска
-systemctl enable supervisor
-systemctl start supervisor
+systemctl enable supervisord
+systemctl start supervisord
 
 #создание каталога для логов сервера
 mkdir -p /var/log/webapps
@@ -81,7 +81,7 @@ Post content:
 
 
 В заключение проверим, что supervisord настроен корретно и готов перезапустить приложение в случае ошибки.
-Для этого эстренно завершим приложение и обратимся к нему с небольшой задержкой:
+Для этого экстренно завершим приложение и обратимся к нему с небольшой задержкой:
 ```bash
 #сервер запущен на 80 порту, пошлём ему сигнал SIGKILL для аварийного завершения
 #затем подождём 5 секунд, чтобы убедиться, что supervisor успел перезапустить сервер.
@@ -132,6 +132,7 @@ uwsgi --plugins=python --http-socket=0.0.0.0:80 --wsgi-file /opt/webcode/former/
 * --master  
 Влючение мастер-процесса. Необходимо для благополучного перезапуска приложения и завершения зависших процессов.
 * --pidfile=/tmp/formdig.pid  
+Адрес, по которому будет создан файл, хранящий pid процесса (до понижения привилегий)
 * --vacuum  
 При указании данной опции, uwsgi пытается удалить созданные сокеты и файлы при завершении работы.
 * --max-requests=5000  
@@ -161,13 +162,13 @@ uwsgi --plugins=python --http-socket=0.0.0.0:80 --wsgi-file /opt/webcode/former/
 Файл для хранения stdout приложения
 *stdout_logfile_maxbytes=60MB  
 Максимальный размер stdout_logfile перед его ротацией.
-* stdout_logfile_backups=4
+* stdout_logfile_backups=4  
 Установка количества файлов, хранимых при ротации stdout_logfile.
 * stdout_capture_maxbytes=4MB  
 Максимально разрешённое количество байт при чтении stdout процесса.
 * stderr_logfile=/var/log/webapps/former_stderr.log  
 Файл для хранения stderr приложения.
-* Максимальный размер stderr_logfile перед его ротацией.
+Максимальный размер stderr_logfile перед его ротацией.
 * stderr_logfile_backups=4  
 Установка количества файлов, хранимых при ротации stderr_logfile.
 * stderr_capture_maxbytes=4MB  
