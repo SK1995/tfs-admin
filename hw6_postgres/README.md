@@ -32,6 +32,7 @@ sudo postgresql-setup initdb
 #запуск и настройка автозагрузки демона postgresql при старте системы
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
+
 #проверка, что база данных успешно запущена
 sudo netstat -tlpn | grep 5432
 ```
@@ -41,9 +42,9 @@ sudo netstat -tlpn | grep 5432
 ```text
 ...
 shared_buffers = 512MB # настройка разделяемой памяти сервера
-work_mem = 32MB        # настройка максимальной памяти для вычислительных процессов
+work_mem = 32MB        # объём памяти, который будет использоваться для внутренних операций сортировки и хеш-таблиц 
 port = 6789            # указание порта
-listen_addresses = '*' # указание серверу слушать подключения со всех ip
+listen_addresses = '*' # указание серверу слушать подключения со всех доступных сетевых интерфейсов
 ...
 ```
 Кроме того, при установке через yum, postgresql на CentOs 7 дополнительно создаёт свой  
@@ -85,7 +86,7 @@ ALTER USER postgres WITH PASSWORD 'postgres';
 ```
 
 ### 2) Создание БД
-Подключимся к БД с новым паролем, создадим таблицу ```test_db``` для работы скриптов из задания:
+Подключимся к БД с новым паролем, создадим базу ```test_db``` для работы скриптов из задания:
 ```bash
 su - postgres
 psql -h 0.0.0.0 -U postgres -W
@@ -98,7 +99,7 @@ CREATE DATABASE test_db;
 написанного на языке python, c использованием драйвера ```psycopg2```.
 
 Создание таблиц, необходимых в задании, описано в файле  [create_tables.sql](https://github.com/SK1995/tfs-admin/blob/hw6_postgres/hw6_postgres/create_tables.sql).  
-Он используется в [main.py](https://github.com/SK1995/tfs-admin/blob/hw6_postgres/hw6_postgres/main.py)в функции ```create_tables```.
+Он используется в [main.py](https://github.com/SK1995/tfs-admin/blob/hw6_postgres/hw6_postgres/main.py) в функции ```create_tables```.
 
 Для удаления таблиц используется запрос из файла [drop_tables.sql](https://github.com/SK1995/tfs-admin/blob/hw6_postgres/hw6_postgres/drop_tables.sql),  
 который вызывается в функции ```drop_tables```.
@@ -108,7 +109,7 @@ CREATE DATABASE test_db;
 т. к. они сравнительно невелеки и требуют параметризации.
 Данные запросы выглядят следующим образом:
 ```sql
-INSERT INTO order_items(order_id, good_id, quantity) VALUES (%s, %s, 42) --добавление нового товара в заказ
+INSERT INTO order_items(order_id, good_id, quantity) VALUES (%s, %s, 42) -- добавление нового товара в заказ
 DELETE FROM order_items where order_id=%s AND good_id=%s                 -- удаление товара из заказа
 UPDATE order_items SET quantity=%s where order_id=%s AND good_id=%s      -- обновление количества товара в заказе
 ```
