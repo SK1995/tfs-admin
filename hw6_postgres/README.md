@@ -81,7 +81,7 @@ sudo netstat -tlpn | grep 6789
 Обновим пароль для пользователя postgres, чтобы его в дальнейшем можно было использовать для подключения с паролем
 ```bash
 su - postgres
-psql -P 6789
+psql -p 6789
 ALTER USER postgres WITH PASSWORD 'postgres';
 ```
 
@@ -118,18 +118,9 @@ UPDATE order_items SET quantity=%s where order_id=%s AND good_id=%s      -- об
 ### 4) Выгрузка всех товаров
 Запрос для выгрузки всех товаров находися в файле [select_all_goods.sql](https://github.com/SK1995/tfs-admin/blob/hw6_postgres/hw6_postgres/select_all_goods.sql).  
 Он вызывается при помощи функции ```get_all_goods``` из [main.py](https://github.com/SK1995/tfs-admin/blob/hw6_postgres/hw6_postgres/main.py), после чего результаты записываются в текстовый файл. 
-Данная часть происходит в участке кода, приведённом ниже:
-```python
-            # save all goods to text file
-            all_goods = get_all_goods(cur)
-            with open('all_goods.txt', 'w') as result_file:
-                result_file.write('Name\tSurname\t\tProduct\t\tVendor\n')
-                for item in all_goods:
-                    result_file.write('\t'.join(item) + '\n')
-```
 
 ### Результаты
-Результаты работы можно проверить на виртуальной машине  ```s-27.fintech-admin.m1.tinkoff.cloud``` (все упомянутые в работе файлы лежат в каталоге ```/root/hw6_postgres```).  
+Результаты работы можно проверить на виртуальной машине  ```s-27.fintech-admin.m1.tinkoff.cloud``` (все упомянутые в работе файлы лежат в каталоге ```/home/user27/hw6_postgres```).  
 Для запуска всех скриптов необходимо выполнить команду ```python main.py```.  
 В результате выполнения с базой test_db будет выполнена следующая последовательность операций:
 * очистка базы 
@@ -139,7 +130,4 @@ UPDATE order_items SET quantity=%s where order_id=%s AND good_id=%s      -- об
 * удаление товара из заказа
 * изменение количества товара в заказе
 * запрос всех товаров, запись результата в текстовый файл (````all_goods.txt````)
-
-
-
 
