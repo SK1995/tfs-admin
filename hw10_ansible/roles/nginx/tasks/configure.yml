@@ -1,0 +1,22 @@
+---
+- name: Create configuration file
+  template:
+    src: etc/nginx/nginx.conf.j2
+    dest: "{{ nginx_directory }}/nginx.conf"
+    owner: root
+    group: root
+    mode: 644
+  notify: Reload Nginx
+
+- name: “Create {{ nginx_vhosts_folder }}”
+  file:
+    path: "{{ nginx_directory }}/{{ nginx_vhosts_folder }}"
+    state: directory
+- name: Put sites.conf
+  template:
+    src: etc/nginx/vhosts.d/sites.conf.j2
+    dest: "{{ nginx_directory }}/{{ nginx_vhosts_folder }}/sites.conf"
+    owner: root
+    group: root
+    mode: 644
+  notify: Reload Nginx

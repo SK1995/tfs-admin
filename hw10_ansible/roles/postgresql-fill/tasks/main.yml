@@ -1,0 +1,3 @@
+---
+- name: Create database and user
+  import_tasks: create_db.yml

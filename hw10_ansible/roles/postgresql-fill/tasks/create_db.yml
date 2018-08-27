@@ -1,0 +1,16 @@
+---
+- name: "Create {{postgres_db}} database"
+  postgresql_db:
+    name: "{{postgres_db}}"
+    port: "{{postgres_port}}"
+    login_password: "{{postgres_password}}"
+    login_host: "{{postgres_host}}"
+
+- name: "Create {{postgres_username}} user for {{postgres_db}}"
+  postgresql_user:
+    db: "{{postgres_db}}"
+    name: "{{postgres_username}}"
+    password: "{{postgres_password}}"
+    port: "{{postgres_port}}"
+    login_password: "{{postgres_password}}"
+    login_host: "{{postgres_host}}"

@@ -1,0 +1,44 @@
+---
+- name: Get db exist status
+  stat:
+    path: "{{ postgres_data_dir }}/PG_VERSION"
+  register: pgdata
+
+- name: Ensure PostgreSQL database is initialized.
+  command: "sudo -u postgres bash -c 'initdb -D {{ postgres_data_dir }}'"
+  when: not pgdata.stat.exists
+
+- name: Set pg_hba
+  template:
+    src: var/lib/pgsql/data/pg_hba.conf.j2
+    dest: "{{ postgresql_conf }}"
+    owner: root
+    group: root
+    mode: 644
+
+- name: Set postgresql.conf
+  template:
+    src: var/lib/pgsql/data/postgresql.conf.j2
+    dest: "{{ postgresql_conf }}"
+    owner: root
+    group: root
+    mode: 644
+
+- name: Disable Selinux
+  selinux:
+    state: disabled
+
+- name: Update postgresql systemd servide
+  lineinfile:
+    path: /lib/systemd/system/postgresql.service
+    regexp: '^Environment=PGPORT='
+    line: 'Environment=PGPORT={{ postgres_listen_port }}'
+
+- name: Run daemon-reload to pick up config changes
+  systemd:
+    daemon_reload: yes
+
+- name: Enable Selinux
+  selinux:
+    policy: targeted
+    state: enforcing

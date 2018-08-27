@@ -1,0 +1,30 @@
+---
+- name: Add repository
+  yum_repository:
+    name: nginx
+    description: Nginx YUM repo
+    baseurl: "{{ nginx_repo }}"
+    gpgcheck: no
+    file: external_repos
+
+- name: Create group
+  group:
+    name: "{{ nginx_user }}"
+    state: present
+
+- name: Create user
+  user:
+    name: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+    state: present
+
+- name: Install Nginx Server
+  yum:
+    name: "nginx-{{ nginx_version }}"
+    state: present
+    update_cache: yes
+
+- service:
+    name: nginx
+    state: started
+    enabled: true

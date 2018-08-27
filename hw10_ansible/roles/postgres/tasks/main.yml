@@ -1,0 +1,7 @@
+---
+- name: Install Postgres
+  import_tasks: install.yml
+- name: Configure Postgres
+  import_tasks: configure.yml
+- name: Restart Postgres
+  import_tasks: restart.yml

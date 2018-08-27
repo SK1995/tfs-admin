@@ -1,0 +1,12 @@
+postgres_work_mem: 32MB
+postgres_shared_buffers: 512MB
+
+postgres_listen_port: 6789
+postgres_listen_interface: "'*'"
+
+postgres_data_dir: /var/lib/pgsql/data
+
+postgresql_service_name: postgresql
+
+postgresql_conf: "{{ postgres_data_dir }}/postgresql.conf"
+postgresql_hba: "{{ postgres_data_dir }}/pg_hba.conf"

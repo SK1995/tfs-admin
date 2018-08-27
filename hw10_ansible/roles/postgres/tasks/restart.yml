@@ -1,0 +1,14 @@
+---
+- name: Disable Selinux
+  selinux:
+    state: disabled
+
+- service:
+    name: "{{ postgresql_service_name }}"
+    state: restarted
+    enabled: true
+
+- name: Enable Selinux
+  selinux:
+    policy: targeted
+    state: enforcing
