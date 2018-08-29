@@ -1,0 +1,27 @@
+---
+- name: Install Postgresql server
+  yum:
+    name: postgresql-server
+    state: present
+    update_cache: yes
+
+- name: Install IUS
+  yum:
+    name:  https://centos7.iuscommunity.org/ius-release.rpm
+    state: present
+
+- name: Install python36u
+  yum:
+    name: python36u
+    state: latest
+
+- name: Install pip3
+  yum:
+    name: python36u-pip
+    state: latest
+
+- name: Install psycopg2
+  pip:
+    name: psycopg2
+    state: present
+    executable: pip3.6

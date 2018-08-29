@@ -1,0 +1,13 @@
+---
+nginx_version: 1.12.2
+nginx_repo: http://nginx.org/packages/centos/$releasever/$basearch/
+nginx_directory: /etc/nginx
+nginx_vhosts_folder: vhosts.d
+nginx_user: www-data
+nginx_worker_proceses: 4
+nginx_worker_connections: 200
+nginx_sites:
+  - "{{ ansible_nodename }}"
+
+django_url: "{{ ansible_nodename }}"
+django_port: 8000
